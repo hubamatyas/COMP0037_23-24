@@ -35,7 +35,6 @@ class OccupancyGrid(CellGrid):
         self._data[y][x] = c
     
     def compute_transition_cost(self, last_coords, current_coords):
-        
         dX = current_coords[0] - last_coords[0]
         dY = current_coords[1] - last_coords[1]
         return math.sqrt(dX * dX + dY * dY)

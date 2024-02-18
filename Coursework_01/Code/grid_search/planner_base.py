@@ -87,7 +87,7 @@ class PlannerBase(object):
             return 0
        
         L = self._environment_map.compute_transition_cost(parent_cell.coords(), cell.coords())
-        
+
         return L
     
     # This method gets the list of cells which potentially could be

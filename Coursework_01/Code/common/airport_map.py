@@ -129,7 +129,7 @@ class AirportMap(CellGrid):
         self._toilets = []        
                 
         # Start without using the type-dependent traversability costs
-        self._use_cell_type_traversability_costs = True
+        self._use_cell_type_traversability_costs = False
     
     def resolution(self):
         return 1
@@ -205,7 +205,6 @@ class AirportMap(CellGrid):
         self._use_cell_type_traversability_costs = use_cell_type_traversability_costs
     
     def compute_transition_cost(self, last_coords, current_coords):
-        
         # Compute the basic Euclidean cost
         dX = current_coords[0] - last_coords[0]
         dY = current_coords[1] - last_coords[1]

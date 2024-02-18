@@ -3,3 +3,7 @@ __pycache__/
 # venv
 venv/
 comp0037
+
+# screenshots
+plots*/
+```
