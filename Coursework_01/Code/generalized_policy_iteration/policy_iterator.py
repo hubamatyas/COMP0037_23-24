@@ -9,6 +9,7 @@ Created on 29 Jan 2022
 import copy
 
 from .dynamic_programming_base import DynamicProgrammingBase
+from enum import IntEnum
 
 
 class PolicyIterator(DynamicProgrammingBase):
@@ -137,28 +138,56 @@ class PolicyIterator(DynamicProgrammingBase):
             
             # Terminate the loop if the change was very small
             if delta < self._theta:
+                # return True
                 break
                 
             # Terminate the loop if the maximum number of iterations is met. Generate
             # a warning
             if iteration >= self._max_policy_evaluation_steps_per_iteration:
                 print('Maximum number of iterations exceeded')
+                # return False
                 break
 
     def _improve_policy(self) -> bool:
-
-        # Q3c:
-        # Implement the policy improvement step.
-        # This step will write the update to self._pi
-        
-        # Get the environment and map
+    # Get the environment and map
         environment = self._environment
         map = environment.map()
 
         policy_stable = True
 
-        # Return true if the policy is stable (=isn't changing)     
+        # Iterate over all states
+        for x in range(map.width()):
+            for y in range(map.height()):
+                # Skip terminal and obstruction states
+                if map.cell(x, y).is_obstruction() or map.cell(x, y).is_terminal():
+                    continue
+
+                # Get current policy action for this state
+                current_action = self._pi.action(x, y)
+
+                # Initialize variables to find the best action and its value
+                best_action = None
+                best_value = float('-inf')
+
+                # Iterate over all possible actions
+                actions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                for action in actions:
+                    # Compute the value of taking this action from the current state
+                    next_states, rewards, probabilities = environment.next_state_and_reward_distribution((x, y), action)
+                    value = sum(probabilities[i] * (rewards[i] + self._gamma * self._v.value(next_states[i].coords()[0], next_states[i].coords()[1])) for i in range(len(next_states)))
+
+                    # Update best action and value if this action leads to a higher value
+                    if value > best_value:
+                        best_action = action
+                        best_value = value
+
+                # Update policy if the best action is different from the current action
+                if best_action != current_action:
+                    self._pi.set_action(x, y, best_action)
+                    policy_stable = False  # Policy changed, so it's not stable
+
         return policy_stable
+
                     
                 
     def set_max_policy_evaluation_steps_per_iteration(self, \

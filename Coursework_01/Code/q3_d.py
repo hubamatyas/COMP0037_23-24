@@ -23,7 +23,7 @@ if __name__ == '__main__':
     
     # Q3d:
     # Configure the process model using different probabilities
-    airport_environment.set_nominal_direction_probability(1)
+    airport_environment.set_nominal_direction_probability(.3)
 
     # Note that you can create multiple instances of the same object, with different
     # settings, and run them in the same programme. Therefore, you do not need to

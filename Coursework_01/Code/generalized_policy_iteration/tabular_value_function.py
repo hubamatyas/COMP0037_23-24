@@ -18,6 +18,7 @@ class TabularValueFunction(Grid):
         Grid.__init__(self, name, \
                       environment_map.width(), environment_map.height())
         
+        # self._values = np.random.rand(self._width, self._height)
         self._values = np.zeros((self._width, self._height))
     
     def set_value(self, x: int, y: int, V: float):

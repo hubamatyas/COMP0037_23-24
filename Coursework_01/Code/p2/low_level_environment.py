@@ -78,6 +78,7 @@ class LowLevelEnvironment(Env):
                 if cell.is_obstruction():
                     v.set_value(x, y, float('nan'))
                 elif cell.is_terminal():
+                    print(cell.params())
                     v.set_value(x, y, cell.params())
         
         return v
