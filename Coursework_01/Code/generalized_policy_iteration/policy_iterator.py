@@ -26,6 +26,8 @@ class PolicyIterator(DynamicProgrammingBase):
         # is carried out.
         self._max_policy_iteration_steps = 1000
         
+        # The number of policy evaluation iterations per policy iteration
+        self.policy_evaluation_iteration_counts = []        
 
     # Perform policy evaluation for the current policy, and return
     # a copy of the state value function. Since this is a deep copy, you can modify it
@@ -55,7 +57,7 @@ class PolicyIterator(DynamicProgrammingBase):
             (policy_iteration_step < self._max_policy_iteration_steps):
             
             # Evaluate the policy
-            self._evaluate_policy()
+            policy_evaluation_iterations = self._evaluate_policy()
 
             # Improve the policy            
             policy_stable = self._improve_policy()
@@ -69,6 +71,9 @@ class PolicyIterator(DynamicProgrammingBase):
                 
             policy_iteration_step += 1
 
+            # Store the number of iterations
+            self.policy_evaluation_iteration_counts.append(policy_evaluation_iterations)
+
         # Draw one last time to clear any transients which might
         # draw changes
         if self._policy_drawer is not None:
@@ -77,8 +82,11 @@ class PolicyIterator(DynamicProgrammingBase):
         if self._value_drawer is not None:
             self._value_drawer.update()
 
-        # Return the value function and policy of the solution
-        return self._v, self._pi
+        total_policy_evaluation_iterations = sum(self.policy_evaluation_iteration_counts)
+
+        # Return the value function, policy, number of overall iterations and number of iterations within the evaluation of the solution
+        return self._v, self._pi, policy_iteration_step, total_policy_evaluation_iterations
+
 
         
     def _evaluate_policy(self):
@@ -139,14 +147,14 @@ class PolicyIterator(DynamicProgrammingBase):
             # Terminate the loop if the change was very small
             if delta < self._theta:
                 # return True
-                break
+                return iteration
                 
             # Terminate the loop if the maximum number of iterations is met. Generate
             # a warning
             if iteration >= self._max_policy_evaluation_steps_per_iteration:
                 print('Maximum number of iterations exceeded')
                 # return False
-                break
+                return iteration
 
     def _improve_policy(self) -> bool:
         environment = self._environment

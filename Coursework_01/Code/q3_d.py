@@ -48,7 +48,7 @@ if __name__ == '__main__':
         policy_solver.set_value_function_drawer(value_function_drawer)
             
         # Compute the solution
-        v, pi = policy_solver.solve_policy()
+        v, pi, _, _ = policy_solver.solve_policy()
         
         # Save screen shot; this is in the current directory
         p_str = str(p).replace(".", "_")
