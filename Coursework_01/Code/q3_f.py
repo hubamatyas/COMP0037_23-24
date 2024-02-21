@@ -20,7 +20,7 @@ if __name__ == '__main__':
     airport_map, drawer_height = full_scenario()
     
     # Add high traversability costs
-    airport_map.set_use_cell_type_traversability_costs(True)
+    # airport_map.set_use_cell_type_traversability_costs(True)
 
     # Set up the environment for the robot driving around
     airport_environment = LowLevelEnvironment(airport_map)
@@ -45,7 +45,8 @@ if __name__ == '__main__':
     v, pi, _ = policy_solver.solve_policy()
     
     # Save screen shot; this is in the current directory
-    policy_drawer.save_screenshot("value_iterator_results.pdf")
+    policy_drawer.save_screenshot("policy_iterator_policy_08.pdf")
+    value_function_drawer.save_screenshot("policy_iterator_value_08.pdf")
     
     # Wait for a key press
     value_function_drawer.wait_for_key_press()
