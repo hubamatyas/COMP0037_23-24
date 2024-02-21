@@ -151,8 +151,9 @@ class PolicyIterator(DynamicProgrammingBase):
     def _improve_policy(self) -> bool:
         environment = self._environment
         map = environment.map()
+
         # Actions the robot might take in each cell are the octagonal actions
-        # Ints representing the actions in LowLevelActionType
+        # Integers represent the actions in LowLevelActionType
         actions = [0, 1, 2, 3, 4, 5, 6, 7]
 
         policy_stable = True

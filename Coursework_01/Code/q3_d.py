@@ -19,6 +19,9 @@ if __name__ == '__main__':
     for p in p_values:
         # Get the map for the scenario
         airport_map, drawer_height = full_scenario()
+
+        # Add high traversability costs
+        # airport_map.set_use_cell_type_traversability_costs(True)
         
         # Set up the environment for the robot driving around
         airport_environment = LowLevelEnvironment(airport_map)
