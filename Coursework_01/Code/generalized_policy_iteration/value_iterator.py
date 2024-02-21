@@ -31,7 +31,7 @@ class ValueIterator(DynamicProgrammingBase):
         if self._value_drawer is not None:
             self._value_drawer.update()
         
-        self._compute_optimal_value_function()
+        value_iteration_step = self._compute_optimal_value_function()
  
         self._extract_policy()
         
@@ -42,8 +42,8 @@ class ValueIterator(DynamicProgrammingBase):
             
         if self._value_drawer is not None:
             self._value_drawer.update()
-        
-        return self._v, self._pi
+
+        return self._v, self._pi, value_iteration_step
 
     # Q3f:
     # Finish the implementation of the methods below.
@@ -110,11 +110,11 @@ class ValueIterator(DynamicProgrammingBase):
             
             # Terminate the loop if the change was very small (ie. convergence is reached)
             if delta < self._theta:
-                break
+                return iteration
 
             if iteration >= self._max_optimal_value_function_iterations:
                 print('Maximum number of iterations exceeded')
-                break
+                return iteration
 
         
     def _extract_policy(self):
