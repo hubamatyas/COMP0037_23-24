@@ -48,8 +48,8 @@ if __name__ == '__main__':
         policy_solver.evaluate_policy()
         value_function_drawer.update()
         
-    # screen_shot_name = 'value_function_convergence.pdf'
-    screen_shot_name = 'value_function_non-convergence.pdf'
+    screen_shot_name = 'value_function_convergence.pdf'
+    # screen_shot_name = 'value_function_non-convergence.pdf'
     value_function_drawer.save_screenshot(screen_shot_name)
     # Wait for a final key press
     value_function_drawer.wait_for_key_press()
