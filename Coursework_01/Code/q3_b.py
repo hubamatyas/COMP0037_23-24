@@ -23,14 +23,14 @@ if __name__ == '__main__':
     airport_environment = LowLevelEnvironment(airport_map)
     
     # Configure the process model
-    airport_environment.set_nominal_direction_probability(.8)
+    airport_environment.set_nominal_direction_probability(1)
 
     # Create the policy iterator
     policy_solver = PolicyIterator(airport_environment)
 
     # Set up initial state
     policy_solver.initialize()
-    # exit()
+
     # Q3 b. Change the discount factor so policy evaluation converges
     policy_solver.set_gamma(0.9)
     
@@ -38,21 +38,18 @@ if __name__ == '__main__':
     policy_solver.set_max_policy_evaluation_steps_per_iteration(10)
             
     # Evaluate the policy. In this part of the question, only this is supported.
-    # V, stable = policy_solver.evaluate_policy()
     V = policy_solver.evaluate_policy()
     
     value_function_drawer = ValueFunctionDrawer(V, drawer_height)
 
     # Run the evaluator repeatedly. This lets you see how the value changes
     # over time.
-    for steps in range(1000):
-        # V, stable = policy_solver.evaluate_policy()
+    for steps in range(100):
         policy_solver.evaluate_policy()
         value_function_drawer.update()
-
-        # if stable:
-        #     break
         
-    policy_solver.policy().show()
+    # screen_shot_name = 'value_function_convergence.pdf'
+    screen_shot_name = 'value_function_non-convergence.pdf'
+    value_function_drawer.save_screenshot(screen_shot_name)
     # Wait for a final key press
     value_function_drawer.wait_for_key_press()

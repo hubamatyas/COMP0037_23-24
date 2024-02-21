@@ -137,8 +137,7 @@ def full_scenario():
     airport_map.add_charging_station(36, 0, 30, 1)
     airport_map.add_charging_station(59, 0, 40, 1)
     
-    airport_map.add_robot_end_station(1, 21, 0)
-    # airport_map.add_robot_end_station(55, 21, 50)
+    airport_map.add_robot_end_station(1, 21, 50)
     
     return airport_map, 800
 

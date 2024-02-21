@@ -46,7 +46,8 @@ if __name__ == '__main__':
     v, pi = policy_solver.solve_policy()
     
     # Save screen shot; this is in the current directory
-    policy_drawer.save_screenshot("policy_iteration_results.jpg")
+    policy_drawer.save_screenshot("policy_iteration_results.pdf")
+    value_function_drawer.save_screenshot("value_function_results.pdf")
     
     # Wait for a key press
     value_function_drawer.wait_for_key_press()

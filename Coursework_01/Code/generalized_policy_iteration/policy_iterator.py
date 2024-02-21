@@ -149,42 +149,49 @@ class PolicyIterator(DynamicProgrammingBase):
                 break
 
     def _improve_policy(self) -> bool:
-    # Get the environment and map
         environment = self._environment
         map = environment.map()
+        # Actions the robot might take in each cell are the octagonal actions
+        # Ints representing the actions in LowLevelActionType
+        actions = [0, 1, 2, 3, 4, 5, 6, 7]
 
         policy_stable = True
 
         # Iterate over all states
         for x in range(map.width()):
             for y in range(map.height()):
+
                 # Skip terminal and obstruction states
                 if map.cell(x, y).is_obstruction() or map.cell(x, y).is_terminal():
                     continue
 
-                # Get current policy action for this state
-                current_action = self._pi.action(x, y)
+                cell = (x, y)
 
-                # Initialize variables to find the best action and its value
-                best_action = None
-                best_value = float('-inf')
+                # Initialize variables to find the new best action and its value
+                new_best_a = None
+                new_best_v = float('-inf')
 
                 # Iterate over all possible actions
-                actions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                for action in actions:
-                    # Compute the value of taking this action from the current state
-                    next_states, rewards, probabilities = environment.next_state_and_reward_distribution((x, y), action)
-                    value = sum(probabilities[i] * (rewards[i] + self._gamma * self._v.value(next_states[i].coords()[0], next_states[i].coords()[1])) for i in range(len(next_states)))
+                for new_a in actions:
+                    # Compute p(s',r|s,a)
+                    s_prime, r, p = environment.next_state_and_reward_distribution(cell, new_a)
 
-                    # Update best action and value if this action leads to a higher value
-                    if value > best_value:
-                        best_action = action
-                        best_value = value
+                    # Sum over the rewards
+                    new_v = 0
+                    for t in range(len(p)):
+                        sc = s_prime[t].coords()
+                        new_v = new_v + p[t] * (r[t] + self._gamma * self._v.value(sc[0], sc[1]))
 
-                # Update policy if the best action is different from the current action
-                if best_action != current_action:
-                    self._pi.set_action(x, y, best_action)
-                    policy_stable = False  # Policy changed, so it's not stable
+                    # Update new best action and value if this action leads to a higher value
+                    if new_v > new_best_v:
+                        new_best_a = new_a
+                        new_best_v = new_v
+
+                # Update policy if the new best action is different from the current best action
+                # Policy changed, so it's not stable
+                if new_best_a != self._pi.action(x, y):
+                    self._pi.set_action(x, y, new_best_a)
+                    policy_stable = False
 
         return policy_stable
 
