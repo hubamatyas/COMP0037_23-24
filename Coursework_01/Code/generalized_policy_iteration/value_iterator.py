@@ -49,10 +49,6 @@ class ValueIterator(DynamicProgrammingBase):
     # Finish the implementation of the methods below.
     
     def _compute_optimal_value_function(self):
-
-        # This method returns no value.
-        # The method updates self._pi
-
         environment = self._environment
         map = environment.map()
 
@@ -110,18 +106,14 @@ class ValueIterator(DynamicProgrammingBase):
             
             # Terminate the loop if the change was very small (ie. convergence is reached)
             if delta < self._theta:
-                return iteration
+                break
 
             if iteration >= self._max_optimal_value_function_iterations:
                 print('Maximum number of iterations exceeded')
-                return iteration
+                break
 
         
     def _extract_policy(self):
-
-        # This method returns no value.
-        # The policy is in self._pi
-
         environment = self._environment
         map = environment.map()
 
