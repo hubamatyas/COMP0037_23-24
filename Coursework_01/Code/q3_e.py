@@ -14,7 +14,6 @@ from p2.low_level_environment import LowLevelEnvironment
 from p2.low_level_policy_drawer import LowLevelPolicyDrawer
 import time
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
