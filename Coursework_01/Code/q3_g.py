@@ -23,7 +23,7 @@ if __name__ == '__main__':
     airport_map, drawer_height = full_scenario()
 
     # Add high traversability costs
-    airport_map.set_use_cell_type_traversability_costs(True)
+    # airport_map.set_use_cell_type_traversability_costs(True)
     
     # Set up the environment for the robot driving around
     airport_environment = LowLevelEnvironment(airport_map)
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     airport_map, drawer_height = full_scenario()
     
     # Add high traversability costs
-    airport_map.set_use_cell_type_traversability_costs(True)
+    # airport_map.set_use_cell_type_traversability_costs(True)
 
     # Set up the environment for the robot driving around
     airport_environment = LowLevelEnvironment(airport_map)
@@ -105,8 +105,9 @@ if __name__ == '__main__':
     print(f"Number of value iteration steps: {value_iteration_step}")
     print(f"Computational time (seconds): {value_computation_time}")
 
-    # Are policy and value iteration results the same?
-    delta = np.max(np.abs(policy_v.value - value_v.value))
+    # Is there a significant difference between the values?
+    delta = np.nanmax(np.abs(policy_v._values - value_v._values))
+    print(f"Max difference between policy and value iteration results: {delta}")
 
     # Wait for a key press
     value_function_drawer.wait_for_key_press()
