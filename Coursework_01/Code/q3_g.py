@@ -17,6 +17,10 @@ import time
 import numpy as np
 
 if __name__ == '__main__':
+
+    # Parameters
+    theta = 10e-5
+    max_steps = 16
     
     # Get the map for the scenario
     #airport_map, drawer_height = three_row_scenario()
@@ -33,6 +37,10 @@ if __name__ == '__main__':
     
     # Create the policy iterator
     policy_solver = PolicyIterator(airport_environment)
+
+    # Set Theta and Max_Steps
+    policy_solver.set_theta(theta)
+    policy_solver.set_max_policy_evaluation_steps_per_iteration(max_steps)
     
     # Set up initial state
     policy_solver.initialize()
