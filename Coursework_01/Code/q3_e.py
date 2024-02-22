@@ -14,7 +14,6 @@ from p2.low_level_environment import LowLevelEnvironment
 from p2.low_level_policy_drawer import LowLevelPolicyDrawer
 import time
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
@@ -148,10 +147,58 @@ if __name__ == '__main__':
             'computation time': computation_time,
             'delta': np.nanmax(np.abs(optimal_v._values - v._values))})
 
-for result in results:
-    print(f"Theta: {result['theta']}")
-    print(f"Max Steps: {result['max_steps']}")
-    print(f"Computation Time (seconds): {result['computation time']}")
-    print(f"Delta: {result['delta']}")
-    print(f"Optimal?: {result['delta'] < threshold}")
-    print()
+    for result in results:
+        print(f"Theta: {result['theta']}")
+        print(f"Max Steps: {result['max_steps']}")
+        print(f"Computation Time (seconds): {result['computation time']}")
+        print(f"Delta: {result['delta']}")
+        print(f"Optimal?: {result['delta'] < threshold}")
+        print()
+
+    # Baseline policy iteration metrics calculations
+    policy_solver = PolicyIterator(airport_environment)
+
+    # Set up initial state
+    policy_solver.initialize()
+        
+    # Compute the solution
+    start_time = time.time()
+    baseline_v, baseline_pi, policy_iteration_step, total_policy_evaluation_iterations = policy_solver.solve_policy()
+    end_time = time.time()
+
+    baseline_computation_time = end_time - start_time
+    
+    print(f"Number of policy iteration steps: {policy_iteration_step}, where each step is 1 policy evaluation + 1 policy improvement")
+    print(f"Total number of policy evaluation iterations: {total_policy_evaluation_iterations}")
+    print(f"Average number of policy evaluation iterations per policy iteration step: {total_policy_evaluation_iterations/policy_iteration_step}")
+    print(f"Computation time (seconds): {baseline_computation_time}")
+
+    # Tuned policy iteration metrics calculation
+    # Parameters
+    theta = 10e-5
+    max_steps = 16
+    
+    policy_solver = PolicyIterator(airport_environment)
+
+    # Set Theta and Max_Steps
+    policy_solver.set_theta(theta)
+    policy_solver.set_max_policy_evaluation_steps_per_iteration(max_steps)
+    
+    # Set up initial state
+    policy_solver.initialize()
+        
+    # Compute the solution
+    start_time = time.time()
+    tuned_v, tuned_pi, policy_iteration_step, total_policy_evaluation_iterations = policy_solver.solve_policy()
+    end_time = time.time()
+
+    tuned_computation_time = end_time - start_time
+    
+    print(f"Number of policy iteration steps: {policy_iteration_step}, where each step is 1 policy evaluation + 1 policy improvement")
+    print(f"Total number of policy evaluation iterations: {total_policy_evaluation_iterations}")
+    print(f"Average number of policy evaluation iterations per policy iteration step: {total_policy_evaluation_iterations/policy_iteration_step}")
+    print(f"Computation time (seconds): {tuned_computation_time}")
+
+    # Is there a significant difference between baseline and tune policy evaluation?
+    delta = np.nanmax(np.abs(baseline_v._values - tuned_v._values))
+    print(f"Max difference between policy and value iteration results: {delta}")

@@ -113,7 +113,7 @@ if __name__ == '__main__':
     print(f"Number of value iteration steps: {value_iteration_step}")
     print(f"Computational time (seconds): {value_computation_time}")
 
-    # Is there a significant difference between the values?
+    # Is there a significant difference between policy and value iteration?
     delta = np.nanmax(np.abs(policy_v._values - value_v._values))
     print(f"Max difference between policy and value iteration results: {delta}")
 
