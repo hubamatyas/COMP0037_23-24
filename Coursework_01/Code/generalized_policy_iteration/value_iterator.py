@@ -106,11 +106,11 @@ class ValueIterator(DynamicProgrammingBase):
             
             # Terminate the loop if the change was very small (ie. convergence is reached)
             if delta < self._theta:
-                break
+                return iteration
 
             if iteration >= self._max_optimal_value_function_iterations:
                 print('Maximum number of iterations exceeded')
-                break
+                return iteration
 
         
     def _extract_policy(self):
