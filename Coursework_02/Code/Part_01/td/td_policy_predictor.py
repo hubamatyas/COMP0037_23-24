@@ -63,21 +63,22 @@ class TDPolicyPredictor(TDAlgorithmBase):
         # new_v = 0
         # self._v.set_value(coords[0], coords[1], new_v)
 
-        for t in range(episode.number_of_steps() - 1):
-            s = episode.state(t)
-            a = episode.action(t)
-            r = episode.reward(t)
-            s_prime = episode.state(t+1)
+        for step in range(episode.number_of_steps() - 1):
+            # action a is here for completeness, but not used in this method
+            a = episode.action(step)
+            r = episode.reward(step)
+            coords = episode.state(step).coords()
+            coords_prime = episode.state(step+1).coords()
 
             # Get current value estimate
-            current_v = self._v.value(s.coords()[0], s.coords()[1])
+            current_v = self._v.value(coords[0], coords[1])
 
             # Get value estimate of next state
-            next_v = self._v.value(s_prime.coords()[0], s_prime.coords()[1])
+            next_v = self._v.value(coords_prime[0], coords_prime[1])
 
             # TD(0) update rule
             new_v = current_v + self._alpha * (r + self._gamma * next_v - current_v)
 
             # Update the value function
-            self._v.set_value(s.coords()[0], s.coords()[1], new_v)
+            self._v.set_value(coords[0], coords[1], new_v)
 
