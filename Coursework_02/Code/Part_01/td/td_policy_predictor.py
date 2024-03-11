@@ -5,6 +5,7 @@ Created on 8 Mar 2023
 '''
 
 from monte_carlo.episode_sampler import EpisodeSampler
+from monte_carlo.episode import Episode
 
 from .td_algorithm_base import TDAlgorithmBase
 
@@ -48,7 +49,7 @@ class TDPolicyPredictor(TDAlgorithmBase):
                 
             self._add_episode_to_experience_replay_buffer(new_episode)
             
-    def _update_value_function_from_episode(self, episode):
+    def _update_value_function_from_episode(self, episode: Episode):
 
         # Q1e:
         # Complete implementation of this method
@@ -58,7 +59,25 @@ class TDPolicyPredictor(TDAlgorithmBase):
         # self._v.set_value(x_cell_coord, y_cell_coord, new_v)
 
         # Example to show how to extract coordinates; this does not do anything useful
-        coords = episode.state(0).coords()
-        new_v = 0
-        self._v.set_value(coords[0], coords[1], new_v)
+        # coords = episode.state(0).coords()
+        # new_v = 0
+        # self._v.set_value(coords[0], coords[1], new_v)
+
+        for t in range(episode.number_of_steps() - 1):
+            s = episode.state(t)
+            a = episode.action(t)
+            r = episode.reward(t)
+            s_prime = episode.state(t+1)
+
+            # Get current value estimate
+            current_v = self._v.value(s.coords()[0], s.coords()[1])
+
+            # Get value estimate of next state
+            next_v = self._v.value(s_prime.coords()[0], s_prime.coords()[1])
+
+            # TD(0) update rule
+            new_v = current_v + self._alpha * (r + self._gamma * next_v - current_v)
+
+            # Update the value function
+            self._v.set_value(s.coords()[0], s.coords()[1], new_v)
 

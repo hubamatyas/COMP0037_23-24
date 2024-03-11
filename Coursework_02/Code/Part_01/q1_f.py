@@ -44,8 +44,8 @@ if __name__ == '__main__':
     
     num_values = len(alpha_values)
     
-    td_predictors = [None] * num_values
-    td_drawers = [None] * num_values
+    td_predictors: list[TDPolicyPredictor] = [None] * num_values
+    td_drawers: list[ValueFunctionDrawer] = [None] * num_values
     
     # TD policy predictor
     for i in range (num_values):
