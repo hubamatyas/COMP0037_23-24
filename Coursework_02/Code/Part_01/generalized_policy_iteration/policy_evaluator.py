@@ -57,10 +57,10 @@ class PolicyEvaluator(DynamicProgrammingBase):
                     # Update the maximum deviation
                     delta = max(delta, d_v)
          
-                    # Increment the policy evaluation counter        
-                    iteration += 1
+            # Increment the policy evaluation counter        
+            iteration += 1
                        
-            print(f'Finished policy evaluation iteration {iteration}')
+            # print(f'Finished policy evaluation iteration {iteration}')
             
             # Terminate the loop if the change was very small
             if delta < self._theta:

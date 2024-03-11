@@ -5,6 +5,7 @@ Created on 23 Feb 2023
 '''
 
 import numpy as np
+import math
 
 from .monte_carlo_policy_predictor import MonteCarloPolicyPredictor
 
@@ -81,6 +82,11 @@ class OffPolicyMCPredictor(MonteCarloPolicyPredictor):
         
         for x in range(w):
             for y in range(h):
+                # Skip nan manually coz otherwise it seems to be rewritten
+                # and the value function plot has 0 instead of nan
+                if  math.isnan(self._v.value(x, y)):
+                    continue
+
                 a = self._pi.action(x, y)
                 self._v.set_value(x, y, self._Q[x, y, a])
 

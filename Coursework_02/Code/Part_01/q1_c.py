@@ -43,7 +43,7 @@ if __name__ == '__main__':
     
     # Off policy MC predictors
     
-    epsilon_b_values = [0.1, 0.2, 0.5, 1.0]
+    epsilon_b_values = [0, 0.1, 0.2, 0.5, 1.0]
     
     num_values = len(epsilon_b_values)
     
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         mc_predictors[i].set_experience_replay_buffer_size(64)
         mc_drawers[i] = ValueFunctionDrawer(mc_predictors[i].value_function(), drawer_height)
         
-    for e in range(100):
+    for e in range(1000):
         for i in range(num_values):
             mc_predictors[i].evaluate()
             mc_drawers[i].update()
