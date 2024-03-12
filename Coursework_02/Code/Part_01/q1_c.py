@@ -67,4 +67,4 @@ if __name__ == '__main__':
        
     v_pe.save_screenshot("q1_c_truth_pe.pdf")
     for i in range(num_values):
-        mc_drawers[i].save_screenshot(f"mc-off-{int(epsilon_b_values[i]*10):03}-pe.pdf")
+        mc_drawers[i].fancy_save_screenshot(f"mc-off-{int(epsilon_b_values[i]*10):03}-pe.pdf")
