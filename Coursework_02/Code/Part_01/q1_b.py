@@ -85,6 +85,10 @@ if __name__ == '__main__':
             v_mcop.update()
             mcop_intermediate_value_functions.append(copy.deepcopy(mcop.value_function()))
 
+        # v_pe.fancy_save_screenshot(f"q1_b_{name}_pe.pdf", title="GT Policy Evaluator")
+        # v_mcpp.fancy_save_screenshot(f"q1_b_{name}_mc-on_pe.pdf", title=f"{name}-visit: On Policy MC Predictor")
+        # v_mcop.fancy_save_screenshot(f"q1_b_{name}_mc-off_pe.pdf", title=f"{name}-visit: Off Policy MC Predictor")
+
         # Necessary to avoid nan result when comparing with np.abs
         pe.value_function()._values = np.nan_to_num(pe.value_function()._values, nan=100)
         mcpp.value_function()._values = np.nan_to_num(mcpp.value_function()._values, nan=100)
@@ -99,40 +103,10 @@ if __name__ == '__main__':
             mcpp_errors.append(np.mean((pe.value_function()._values - mcpp_value_function)**2))
             mcop_errors.append(np.mean((pe.value_function()._values - mcop_value_function)**2))
             
-
         # plt.plot(mcpp_errors, label=f"{name}-visit: On Policy MC Predictor")
         # plt.plot(mcop_errors, label=f"{name}-viist: Off Policy MC Predictor")
         errors.append(mcpp_errors)
         errors.append(mcop_errors)
-        
-        # Rotate the values to match the screenshot
-        rotated_pe_values = np.rot90(pe.value_function()._values, k=1)
-        rotated_mcpp_values = np.rot90(mcpp.value_function()._values, k=1)
-        rotated_mcop_values = np.rot90(mcop.value_function()._values, k=1)
-
-        # Plot the value functions with heatmaps
-        fig, ax = plt.subplots(3, 1)
-
-        ax[0].imshow(rotated_pe_values, cmap='hot', interpolation='nearest')
-        ax[0].set_xticks(np.arange(0, 20, 1))
-        ax[0].set_title('GT Policy Evaluator')
-
-        ax[1].imshow(rotated_mcpp_values, cmap='hot', interpolation='nearest')
-        ax[1].set_xticks(np.arange(0, 20, 1))
-        ax[1].set_title('On Policy MC Predictor')
-
-        ax[2].imshow(rotated_mcop_values, cmap='hot', interpolation='nearest')
-        ax[2].set_xticks(np.arange(0, 20, 1))
-        ax[2].set_title('Off Policy MC Predictor')
-        
-        # Plot the colorbars
-        plt.colorbar(ax[0].imshow(rotated_pe_values, cmap='hot', interpolation='nearest'), ax=ax[0])
-        plt.colorbar(ax[1].imshow(rotated_mcpp_values, cmap='hot', interpolation='nearest'), ax=ax[1])
-        plt.colorbar(ax[2].imshow(rotated_mcop_values, cmap='hot', interpolation='nearest'), ax=ax[2])
-        plt.tight_layout()
-        # plt.show()
-
-        # fig.savefig(f"q1_b_{name}.pdf")
 
         # Calculate the sum of absolute errors, max absolute error, and average absolute error for off-policy
         sum_off_policy_error = np.sum(np.abs(pe.value_function()._values - mcop.value_function()._values))
@@ -174,7 +148,7 @@ if __name__ == '__main__':
     ax.set_xlim(right=500)
     ax.set_ylabel("Mean Squared Error")
     ax.legend()
-    plt.savefig("q1_b_errors.pdf")
+    # plt.savefig("q1_b_errors.pdf")
 
     new_fig = plt.figure()
     ax = new_fig.add_subplot(111)

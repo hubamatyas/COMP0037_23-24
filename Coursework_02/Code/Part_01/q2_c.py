@@ -7,6 +7,9 @@ Created on 9 Mar 2023
 '''
 
 import math
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import numpy as np
 
 from common.scenarios import corridor_scenario
 
@@ -52,6 +55,11 @@ if __name__ == '__main__':
         policy_learner.find_policy()
         value_function_drawer.update()
         greedy_optimal_policy_drawer.update()
-        pi.set_epsilon(1/math.sqrt(1+0.25*i))
-        print(f"epsilon={1/math.sqrt(1+i)};alpha={policy_learner.alpha()}")
+        epsilon = 1 / math.sqrt(1 + 0.25 * i)
+        pi.set_epsilon(epsilon)
+        print(f"epsilon={epsilon};alpha={policy_learner.alpha()}")
+
+    value_function_drawer.fancy_save_screenshot("q2_b_value_function_fancy.pdf")
+    value_function_drawer.save_screenshot("q2_b_value_function.pdf")
+    greedy_optimal_policy_drawer.save_screenshot("q2_b_greedy_optimal_policy.pdf")
         

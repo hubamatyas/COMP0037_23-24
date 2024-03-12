@@ -9,6 +9,9 @@ from .grid import Grid
 from .graphics import *
 from .graphics import _root
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 class GridDrawer(object):
 
@@ -96,6 +99,48 @@ class GridDrawer(object):
             screenshot_rgb.save(filename)
 
         print(f"Finished saving {filename}")
+
+    def fancy_save_screenshot(self, filename: str, is_showing: bool = False, title: str = None):
+        value_function = np.rot90(self._grid._values, k=1)
+
+        # Set up heatmap and default value for nans
+        cmap = plt.cm.get_cmap('viridis', 256)
+        cmap.set_bad(color='white')
+
+        # Plot the value function
+        plt.imshow(value_function, cmap=cmap, interpolation='nearest')
+
+        # Set the title
+        if title is not None:
+            plt.title(title)
+
+        # Formatting
+        # Set figure size to match the dimensions of the value function
+        plt.gcf().set_size_inches(value_function.shape[1] / 2, value_function.shape[0] / 2)
+        plt.gca().set_xticks([])
+        plt.gca().set_yticks([])
+
+        # Remove the border around the heatmap
+        # plt.gca().spines['top'].set_visible(False)
+        # plt.gca().spines['right'].set_visible(False)
+        # plt.gca().spines['bottom'].set_visible(False)
+        # plt.gca().spines['left'].set_visible(False)
+
+        # Show the values within each cell and add border around each cell
+        for i in range(value_function.shape[0]):
+            for j in range(value_function.shape[1]):
+                plt.text(j, i, f"{value_function[i, j]:.2f}", ha='center', va='center', color='black')
+                plt.gca().add_patch(plt.Rectangle((j - 0.5, i - 0.5), 1, 1, fill=False, edgecolor='black'))
+
+        # Remove margin and padding
+        plt.margins(0)
+        plt.gcf().subplots_adjust(bottom=0, top=1, left=0, right=1)
+
+        if is_showing:
+            plt.show()
+
+        plt.savefig(filename)
+        plt.close()
 
     def update(self):
         raise NotImplementedError()
