@@ -7,6 +7,7 @@ Created on 8 Mar 2023
 import random
 import math
 import numpy as np
+import time
 
 from monte_carlo.episode_sampler import EpisodeSampler
 
@@ -48,8 +49,12 @@ class TDController(TDAlgorithmBase):
         # Although this can be done in real-time, we follow the convention
         # of running it MC-like. 
         episode_sampler = EpisodeSampler(self._environment)
-        
+
+        time_list = []
+        steps_list = []
         for episode in range(self._number_of_episodes):
+            start_time = time.time()
+            steps = 0
 
             # Choose the start for the episode            
             start_x, start_a = self._select_episode_start()
@@ -57,7 +62,7 @@ class TDController(TDAlgorithmBase):
             
             # Sample the episode
             new_episode = episode_sampler.sample_episode(self._pi, start_x, start_a)
-
+            steps += new_episode.number_of_steps()
             # If we didn't reach a terminal state, the 
             # episode was not successful, so we skip it
             if new_episode.terminated_successfully() is False:
@@ -69,9 +74,15 @@ class TDController(TDAlgorithmBase):
             # Pick several randomly from the experience replay buffer and update with those as well
             for _ in range(min(self._replays_per_update, self._stored_experiences)):
                 episode = self._draw_random_episode_from_experience_replay_buffer()
+                steps += episode.number_of_steps()
                 self._update_action_and_value_functions_from_episode(episode)
                 
             self._add_episode_to_experience_replay_buffer(new_episode)
+           
+            time_list.append(time.time() - start_time)
+            steps_list.append(steps)
+
+        return time_list, steps_list
         
     def _update_action_and_value_functions_from_episode(self, episode):
         raise NotImplementedError()
