@@ -51,16 +51,11 @@ if __name__ == '__main__':
     
     full_time_list = []
     full_steps_list = []
-    iteration_time_list = []
-    iteration_steps_list = []
     for i in range(40):
         time_list, updates_list = policy_learner.find_policy()
 
         full_time_list.extend(time_list)
         full_steps_list.extend(updates_list)
-
-        iteration_time_list.append(time_list[-1])
-        iteration_steps_list.append(updates_list[-1])
         
         value_function_drawer.update()
         greedy_optimal_policy_drawer.update()
@@ -72,16 +67,28 @@ if __name__ == '__main__':
         print(f"Total time taken for iteration {i}: {sum(time_list)}")
         print(f"Total number of steps in iteration {i}: {sum(updates_list)}\n")
 
-    # plot number of updates as episodes progress
-    plt.plot(full_steps_list)
-    plt.xlabel('Episode')
-    plt.ylabel('Number of steps in newly generated episode')
+    # Plot the time and steps per episode and their trendlines
+    trend = np.polyfit(range(len(full_time_list)), full_time_list, 9)
+    trendline = np.poly1d(trend)
 
-    # plot time taken for each episode
+    plt.plot(full_time_list, label="Time (s) per episode", color="tab:green", alpha=0.85)
+    plt.plot(trendline(range(len(full_time_list))), label=f"Trendline", color="tab:orange")
+    plt.xlabel("Episode")
+    plt.ylabel("Time (s)")
+    plt.legend()
+    plt.savefig("q2_d_time_per_episode.pdf")
+
     plt.figure()
-    plt.plot(full_time_list, color='red')
-    plt.xlabel('Episode')
-    plt.ylabel('Time taken')
+
+    trend = np.polyfit(range(len(full_steps_list)), full_steps_list, 9)
+    trendline = np.poly1d(trend)
+
+    plt.plot(full_steps_list, label="Steps per episode", color="tab:blue")
+    plt.plot(trendline(range(len(full_steps_list))), label=f"Trendline", color="tab:orange")
+    plt.xlabel("Episode")
+    plt.ylabel("Steps")
+    plt.legend()
+    plt.savefig("q2_d_steps_per_episode.pdf")
 
     plt.show()
 
