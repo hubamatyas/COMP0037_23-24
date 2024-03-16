@@ -71,8 +71,8 @@ if __name__ == '__main__':
     trend = np.polyfit(range(len(full_time_list)), full_time_list, 9)
     trendline = np.poly1d(trend)
 
-    plt.plot(full_time_list, label="Time (s) per episode", color="tab:green", alpha=0.85)
-    plt.plot(trendline(range(len(full_time_list))), label=f"Trendline", color="tab:orange")
+    plt.plot(full_time_list, label="Time (s) per episode", color="tab:green", alpha=0.65)
+    plt.plot(trendline(range(len(full_time_list))), label=f"Trendline", color="tab:red")
     plt.xlabel("Episode")
     plt.ylabel("Time (s)")
     plt.legend()
@@ -83,7 +83,7 @@ if __name__ == '__main__':
     trend = np.polyfit(range(len(full_steps_list)), full_steps_list, 9)
     trendline = np.poly1d(trend)
 
-    plt.plot(full_steps_list, label="Steps per episode", color="tab:blue")
+    plt.plot(full_steps_list, label="Steps per episode", color="tab:blue", alpha=0.85)
     plt.plot(trendline(range(len(full_steps_list))), label=f"Trendline", color="tab:orange")
     plt.xlabel("Episode")
     plt.ylabel("Steps")
