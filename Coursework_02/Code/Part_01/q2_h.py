@@ -65,4 +65,10 @@ if __name__ == '__main__':
             v_renderers[l].update()
             p_renderers[l].update()
             pi[l].set_epsilon(1/math.sqrt(1+0.25*i))
+
+    v_renderers[0].fancy_save_screenshot("q2_f_Sarsa_value_function.pdf")
+    p_renderers[0].save_screenshot("q2_f_Sarsa_policy.pdf")
+
+    v_renderers[1].fancy_save_screenshot("q2_f_Q_value_function.pdf")
+    p_renderers[1].save_screenshot("q2_f_Q_policy.pdf")
         
