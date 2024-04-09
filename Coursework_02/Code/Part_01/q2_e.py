@@ -52,7 +52,7 @@ if __name__ == '__main__':
     full_time_list = []
     full_steps_list = []
     for i in range(40):
-        time_list, updates_list = policy_learner.find_policy()
+        time_list, updates_list, _ = policy_learner.find_policy()
 
         full_time_list.extend(time_list)
         full_steps_list.extend(updates_list)

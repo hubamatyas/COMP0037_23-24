@@ -52,6 +52,8 @@ class TDController(TDAlgorithmBase):
 
         time_list = []
         steps_list = []
+        rewards_list = []
+
         for episode in range(self._number_of_episodes):
             start_time = time.time()
             steps = 0
@@ -67,6 +69,10 @@ class TDController(TDAlgorithmBase):
             # episode was not successful, so we skip it
             if new_episode.terminated_successfully() is False:
                 continue
+
+            # Compute the total reward for the episode and add it to the rewards list
+            total_reward = new_episode.total_reward()
+            rewards_list.append(total_reward)
             
             # Update with the current episode
             self._update_action_and_value_functions_from_episode(new_episode)
@@ -82,7 +88,7 @@ class TDController(TDAlgorithmBase):
             time_list.append(time.time() - start_time)
             steps_list.append(steps)
 
-        return time_list, steps_list
+        return time_list, steps_list, rewards_list
         
     def _update_action_and_value_functions_from_episode(self, episode):
         raise NotImplementedError()

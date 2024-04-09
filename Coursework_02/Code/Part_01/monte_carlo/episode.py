@@ -40,6 +40,10 @@ class Episode(object):
     def reward(self, s):
         return self._r[s]
     
+    def total_reward(self):
+        # Sum up all the rewards for this episode
+        return sum(self._r[:self._number_of_steps])
+    
     def number_of_steps(self):
         return self._number_of_steps
     
